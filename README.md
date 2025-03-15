@@ -1,7 +1,8 @@
 # x-ArraySearch
 
-[![测试覆盖率](https://img.shields.io/badge/coverage-100%25-success)](https://github.com/onewayx/x-arraysearch)
+[![测试覆盖率](https://img.shields.io/badge/coverage-100%25-success)](https://github.com/YIfangweb/x-arraysearch)
 ![TypeScript](https://img.shields.io/badge/lang-typescript-blue)
+[![Issues](https://img.shields.io/badge/x-arraysearch-issues)](https://github.com/YIfangweb/x-arraysearch/issues)
 
 用于复杂对象搜索的TypeScript工具库，支持：
 - 多层级嵌套对象
@@ -154,4 +155,4 @@ const results = await searchData(data, 100, { customMatch: customMatcher });
 3. 添加对应的文档说明
 
 ## 许可证
-MIT © 2024 Your Name
+MIT © 2025 onewayx

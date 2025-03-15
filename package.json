@@ -1,6 +1,6 @@
 {
   "name": "x-arraysearch",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "高级对象搜索工具库，支持多层级嵌套对象、数组自动展开、自定义匹配逻辑和安全深度控制",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -34,12 +34,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/onewayx/x-arraysearch.git"
+    "url": "git+https://github.com/YIfangweb/x-arraysearch.git"
   },
   "bugs": {
-    "url": "https://github.com/onewayx/x-arraysearch/issues"
+    "url": "https://github.com/YIfangweb/x-arraysearch/issues"
   },
-  "homepage": "https://github.com/onewayx/x-arraysearch#readme",
+  "homepage": "https://github.com/YIfangweb/x-arraysearch#readme",
   "devDependencies": {
     "@types/node": "^20.0.0",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
