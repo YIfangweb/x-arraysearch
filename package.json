@@ -1,0 +1,56 @@
+{
+  "name": "x-arraysearch",
+  "version": "1.0.0",
+  "description": "高级对象搜索工具库，支持多层级嵌套对象、数组自动展开、自定义匹配逻辑和安全深度控制",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "lint": "eslint src --ext .ts",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "search",
+    "array",
+    "object",
+    "typescript",
+    "nested",
+    "filter",
+    "deep",
+    "match",
+    "advanced"
+  ],
+  "author": "onewayx",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/onewayx/x-arraysearch.git"
+  },
+  "bugs": {
+    "url": "https://github.com/onewayx/x-arraysearch/issues"
+  },
+  "homepage": "https://github.com/onewayx/x-arraysearch#readme",
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.0.0",
+    "prettier": "^3.0.0",
+    "tsup": "^8.0.0",
+    "typescript": "^5.0.0",
+    "vitest": "^1.0.0"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+} 
