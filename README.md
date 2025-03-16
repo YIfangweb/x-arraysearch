@@ -1,4 +1,4 @@
-# x-ArraySearch
+# X-ArraySearch
 
 [![测试覆盖率](https://img.shields.io/badge/coverage-100%25-success)](https://github.com/YIfangweb/x-arraysearch)
 ![TypeScript](https://img.shields.io/badge/lang-typescript-blue)
@@ -13,38 +13,9 @@
 ## 安装
 
 ```bash
-npm install x-arraysearch
+npm i x-arraysearch@latest
 # 或
 yarn add x-arraysearch
-```
-
-## 快速开始
-
-```typescript
-import { searchData, createRegExpMatcher } from 'x-arraysearch';
-
-const products = [
-  {
-    id: 1,
-    name: 'iPhone 13',
-    details: {
-      tags: ['手机', '苹果'],
-      specs: {
-        storage: '128GB',
-        color: '暗夜绿'
-      }
-    }
-  }
-];
-
-// 简单搜索
-const results = await searchData(products, 'iPhone');
-
-// 高级搜索
-const filtered = await searchData(products, '^128', {
-  keys: ['details.specs.storage'],
-  customMatch: createRegExpMatcher('i')
-});
 ```
 
 ## 核心特性
@@ -85,7 +56,7 @@ function searchData<T extends Record<string, any>>(
 ```
 
 **参数**
-- `data`: 要搜索的对象数组
+- `data`: 对象数组
 - `term`: 搜索关键词
 - `options`: 配置选项
   - `keys`: 搜索路径数组
@@ -105,32 +76,178 @@ function searchData<T extends Record<string, any>>(
 #### `createRegExpMatcher(flags?)`
 创建正则表达式匹配器工厂函数
 
-## 最佳实践
+## 使用指南
 
-### 处理大型数据集
+### 快速开始
+
 ```typescript
-// 使用路径限制搜索范围
-const results = await searchData(largeData, 'target', {
-  keys: ['importantField', 'nested.targetField'],
-  parallel: true
+import { searchData, createRegExpMatcher } from 'x-arraysearch';
+
+const products = [
+  {
+    id: 1,
+    name: 'iPhone 13',
+    details: {
+      tags: ['手机', '苹果'],
+      specs: {
+        storage: '128GB',
+        color: '暗夜绿'
+      }
+    }
+  }
+];
+
+// 简单搜索
+const results = await searchData(products, 'iPhone');
+
+// 高级搜索
+const filtered = await searchData(products, '^128', {
+  keys: ['details.specs.storage'],
+  customMatch: createRegExpMatcher('i')
 });
 ```
 
-### 优化重复查询
-```typescript
-// 启用路径缓存
-const options = {
-  keys: ['deep.nested.field'],
-  enablePathCache: true
-};
+### 基本搜索功能
 
-// 第一次查询会缓存路径
-const firstResults = await searchData(data, 'term1', options);
-// 后续查询使用缓存
-const secondResults = await searchData(data, 'term2', options);
+#### 简单文本搜索
+默认情况下，`searchData` 会在整个对象树中搜索匹配项，不区分大小写：
+
+```typescript
+// 搜索包含 "iphone" 的数据（不区分大小写）
+const results = await searchData(products, 'iphone');
 ```
 
-### 自定义匹配逻辑
+#### 搜索特定属性
+通过指定 `keys` 选项限制搜索范围：
+
+```typescript
+// 只在产品名称中搜索
+const results = await searchData(products, '苹果', {
+  keys: ['name']
+});
+```
+
+#### 递归深度控制
+设置 `maxDepth` 以限制递归深度，防止过深的对象导致性能问题：
+
+```typescript
+// 限制搜索深度为3层
+const results = await searchData(complexData, 'target', {
+  maxDepth: 3
+});
+```
+
+### 高级路径搜索
+
+#### 点表示法搜索
+可以使用点表示法精确定位嵌套属性：
+
+```typescript
+// 搜索特定嵌套属性
+const results = await searchData(products, '手机', {
+  keys: ['category.sub']
+});
+```
+
+#### 多路径搜索
+同时在多个路径中进行搜索：
+
+```typescript
+// 同时搜索颜色和标签
+const results = await searchData(products, '白色', {
+  keys: ['specs.color', 'tags']
+});
+```
+
+#### 数组路径遍历
+自动展开和搜索数组内的元素：
+
+```typescript
+// 搜索产品功能列表
+const results = await searchData(products, 'Face ID', {
+  keys: ['specs.features']
+});
+```
+
+### 匹配器使用
+
+#### 默认匹配器
+不区分大小写的部分匹配，适用于大多数场景：
+
+```typescript
+// 默认使用 defaultMatcher
+const results = await searchData(products, 'pro');
+
+// defaultMatcher 的行为：
+// - 'Hello World' 匹配 'world'
+// - 123 匹配 '23'
+// - true 匹配 'true'
+```
+
+#### 精确匹配器
+使用严格相等比较，特别适合比较数值和布尔值：
+
+```typescript
+import { searchData, exactMatcher } from 'x-arraysearch';
+
+// 只匹配库存数量恰好为 100 的产品
+const results = await searchData(products, 100, {
+  keys: ['stock.count'],
+  customMatch: exactMatcher
+});
+
+// exactMatcher 的行为：
+// - 123 只匹配 123 (不匹配 '123')
+// - true 只匹配 true (不匹配 'true')
+```
+
+#### 正则表达式匹配器
+支持使用正则表达式进行复杂模式匹配：
+
+```typescript
+import { searchData, createRegExpMatcher } from 'x-arraysearch';
+
+// 使用正则表达式匹配所有以数字开头的型号
+const regexMatcher = createRegExpMatcher('i'); // 'i' 表示不区分大小写
+const results = await searchData(products, '^\\d+', {
+  keys: ['model'],
+  customMatch: regexMatcher
+});
+```
+
+### 性能优化技术
+
+#### 路径缓存
+对于重复查询，启用路径缓存可显著提高性能：
+
+```typescript
+// 创建共享搜索配置
+const searchOptions = {
+  keys: ['category.sub', 'specs.features'],
+  enablePathCache: true  // 默认就是 true
+};
+
+// 首次查询会缓存解析后的路径
+const phoneResults = await searchData(products, '手机', searchOptions);
+// 后续查询复用缓存，提高性能
+const iosResults = await searchData(products, 'iOS', searchOptions);
+```
+
+#### 并行处理大数据集
+处理大量数据时，启用并行处理能加快搜索速度：
+
+```typescript
+// 处理超过1000条的数据集
+const results = await searchData(largeData, 'target', {
+  keys: ['importantField', 'nested.targetField'],
+  parallel: true  // 自动分片并行处理
+});
+```
+
+### 自定义搜索逻辑
+
+创建自定义匹配函数来实现特定的比较逻辑：
+
 ```typescript
 const customMatcher = (value: unknown, term: unknown) => {
   if (typeof value === 'number') {
@@ -139,7 +256,33 @@ const customMatcher = (value: unknown, term: unknown) => {
   return defaultMatcher(value, term);
 };
 
-const results = await searchData(data, 100, { customMatch: customMatcher });
+// 查找价格高于5000的所有产品
+const results = await searchData(products, 5000, {
+  keys: ['price'],
+  customMatch: customMatcher
+});
+```
+
+### 边界情况处理
+
+#### 空数据集处理
+正确处理空数组：
+
+```typescript
+// 返回空数组，不会抛出错误
+const results = await searchData([], 'test');
+```
+
+#### 循环引用安全处理
+自动检测并处理循环引用：
+
+```typescript
+// 创建循环引用的数据
+const circularData = { name: 'test' };
+circularData.self = circularData;
+
+// 安全处理循环引用，不会导致栈溢出
+const results = await searchData([circularData], 'test');
 ```
 
 ## 注意事项
