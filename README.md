@@ -3,6 +3,8 @@
 [![测试覆盖率](https://img.shields.io/badge/coverage-100%25-success)](https://github.com/YIfangweb/x-arraysearch)
 ![TypeScript](https://img.shields.io/badge/lang-typescript-blue)
 [![Issues](https://img.shields.io/badge/x-arraysearch-issues)](https://github.com/YIfangweb/x-arraysearch/issues)
+[![npm version](https://img.shields.io/npm/v/x-arraysearch.svg?color=blue)](https://www.npmjs.com/package/x-arraysearch)
+[![npm weekly downloads](https://img.shields.io/npm/dw/x-arraysearch.svg?color=green)](https://www.npmjs.com/package/x-arraysearch)
 
 用于复杂对象搜索的TypeScript工具库，支持：
 - 多层级嵌套对象
